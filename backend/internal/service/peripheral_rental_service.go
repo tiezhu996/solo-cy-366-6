@@ -47,6 +47,10 @@ func (s *PeripheralRentalService) Create(operatorID uint, req *dto.CreateRentalR
 		}
 		return nil, fmt.Errorf("rental find member: %w", err)
 	}
+	if member.Role != constants.RoleMember {
+		return nil, util.NewAppError(constants.CodeValidation,
+			fmt.Sprintf("租借对象必须是会员，用户 %s 的角色为 %s，不能作为租借对象", member.Username, util.RoleText(member.Role)))
+	}
 	peripheral, err := s.peripheralService.GetByID(req.PeripheralID)
 	if err != nil {
 		return nil, err

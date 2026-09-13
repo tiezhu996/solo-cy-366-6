@@ -48,7 +48,7 @@ func TestRentalCreateOK(t *testing.T) {
 	svc, mock := newRentalMockService(t)
 	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `users` WHERE `users`.`id` = ? ORDER BY `users`.`id` LIMIT ?")).
 		WithArgs(2, 1).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "username", "balance"}).AddRow(2, "member", 200))
+		WillReturnRows(sqlmock.NewRows([]string{"id", "username", "role", "balance"}).AddRow(2, "member", "member", 200))
 	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `peripherals` WHERE `peripherals`.`id` = ? ORDER BY `peripherals`.`id` LIMIT ?")).
 		WithArgs(3, 1).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "device_no", "device_type", "name", "status"}).AddRow(3, "KB-001", "keyboard", "机械键盘", "available"))
@@ -84,12 +84,31 @@ func TestRentalCreateOK(t *testing.T) {
 	}
 }
 
+// TestRentalCreateRejectsNonMember 租借对象必须限于会员：管理员/店员不能被登记为租借人。
+func TestRentalCreateRejectsNonMember(t *testing.T) {
+	svc, mock := newRentalMockService(t)
+	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `users` WHERE `users`.`id` = ? ORDER BY `users`.`id` LIMIT ?")).
+		WithArgs(1, 1).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "username", "role", "balance"}).AddRow(1, "admin", "admin", 0))
+
+	_, err := svc.Create(1, &dto.CreateRentalReq{
+		UserID:           1,
+		PeripheralID:     3,
+		Deposit:          100,
+		ExpectedReturnAt: time.Now().Add(24 * time.Hour),
+	})
+	assertAppErrorCode(t, err, constants.CodeValidation)
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Fatalf("expectations not met: %v", err)
+	}
+}
+
 // TestRentalCreateDeviceRented 同一设备不能重复借出：设备非可借状态时事务回滚。
 func TestRentalCreateDeviceRented(t *testing.T) {
 	svc, mock := newRentalMockService(t)
 	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `users` WHERE `users`.`id` = ? ORDER BY `users`.`id` LIMIT ?")).
 		WithArgs(2, 1).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "username", "balance"}).AddRow(2, "member", 200))
+		WillReturnRows(sqlmock.NewRows([]string{"id", "username", "role", "balance"}).AddRow(2, "member", "member", 200))
 	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `peripherals` WHERE `peripherals`.`id` = ? ORDER BY `peripherals`.`id` LIMIT ?")).
 		WithArgs(3, 1).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "device_no", "device_type", "name", "status"}).AddRow(3, "KB-001", "keyboard", "机械键盘", "rented"))

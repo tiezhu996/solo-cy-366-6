@@ -86,6 +86,7 @@ func toUserItem(u *model.User) *dto.UserItem {
 		Phone:    u.Phone,
 		Role:     u.Role,
 		Balance:  u.Balance,
+		Debt:     u.Debt,
 		Status:   u.Status,
 	}
 }

@@ -28,6 +28,7 @@ type UserItem struct {
 	Phone    string  `json:"phone"`
 	Role     string  `json:"role"`
 	Balance  float64 `json:"balance"`
+	Debt     float64 `json:"debt"` // 会员欠款（外设损坏押金不足部分计入）
 	Status   string  `json:"status"`
 }
 
