@@ -47,7 +47,7 @@ func (r *UserPackageRepository) ConsumeHours(userID uint, hours float64) (float6
 	consumed := 0.0
 	err := r.db.Transaction(func(tx *gorm.DB) error {
 		var list []model.UserPackage
-		if err := tx.Clauses(clauseLocking()).
+		if err := withLocking(tx).
 			Where("user_id = ? AND status = ? AND remaining_hours > 0", userID, "active").
 			Order("expire_at ASC").Find(&list).Error; err != nil {
 			return err

@@ -69,7 +69,7 @@ func (r *PeripheralRepository) List(page, pageSize int, deviceType, status strin
 // LockByID 行锁查询设备（并发租借防重复借出使用）。
 func (r *PeripheralRepository) LockByID(tx *gorm.DB, id uint) (*model.Peripheral, error) {
 	var p model.Peripheral
-	err := tx.Clauses(clauseLocking()).First(&p, id).Error
+	err := withLocking(tx).First(&p, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, ErrNotFound
 	}

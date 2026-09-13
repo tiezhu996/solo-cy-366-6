@@ -277,6 +277,8 @@ go vet ./...
 go test ./...
 ```
 
+测试说明：`internal/service`、`internal/repository` 为单元测试（状态机、赔付拆分、sqlmock 事务序列）；`internal/apitest` 为外设租借闭环的 HTTP 级集成测试，使用内存 SQLite 装配真实引擎与中间件，每个测试独立建库、自建数据、结束即销毁，覆盖会员欠款显示、非会员租借对象拒绝、正常借出、重复借出拒绝、完好归还、重复处理拒绝、损坏赔付与重复扣款拒绝，可重复运行（如 `go test ./internal/apitest/ -count=2`）。
+
 前端（Node 18+）：
 
 ```bash

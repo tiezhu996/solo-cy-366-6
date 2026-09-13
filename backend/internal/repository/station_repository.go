@@ -71,7 +71,7 @@ func (r *StationRepository) ListAll() ([]model.Station, error) {
 // LockByID 行锁查询机位（并发状态流转使用）。
 func (r *StationRepository) LockByID(tx *gorm.DB, id uint) (*model.Station, error) {
 	var s model.Station
-	err := tx.Clauses(clauseLocking()).First(&s, id).Error
+	err := withLocking(tx).First(&s, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, ErrNotFound
 	}

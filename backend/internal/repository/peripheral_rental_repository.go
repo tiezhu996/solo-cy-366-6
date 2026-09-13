@@ -36,7 +36,7 @@ func (r *PeripheralRentalRepository) FindByID(id uint) (*model.PeripheralRental,
 // LockByID 行锁查询租借记录（归还/损坏赔付防重复处理使用）。
 func (r *PeripheralRentalRepository) LockByID(tx *gorm.DB, id uint) (*model.PeripheralRental, error) {
 	var rental model.PeripheralRental
-	err := tx.Clauses(clauseLocking()).First(&rental, id).Error
+	err := withLocking(tx).First(&rental, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, ErrNotFound
 	}

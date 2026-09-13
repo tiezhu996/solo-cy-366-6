@@ -31,14 +31,14 @@ func Connect(cfg *config.Config) (*gorm.DB, error) {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	if err := migrate(db); err != nil {
+	if err := Migrate(db); err != nil {
 		return nil, fmt.Errorf("database migrate: %w", err)
 	}
 	return db, nil
 }
 
-// migrate 自动建表。
-func migrate(db *gorm.DB) error {
+// Migrate 自动建表（集成测试复用同一模型清单）。
+func Migrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&model.User{},
 		&model.Station{},

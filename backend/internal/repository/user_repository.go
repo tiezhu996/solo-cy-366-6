@@ -81,7 +81,7 @@ func (r *UserRepository) UpdateBalance(userID uint, delta float64) error {
 // UpdateBalanceTx 事务内更新余额（扣款时校验余额充足），供多步写操作复用。
 func (r *UserRepository) UpdateBalanceTx(tx *gorm.DB, userID uint, delta float64) error {
 	var u model.User
-	if err := tx.Clauses(clauseLocking()).First(&u, userID).Error; err != nil {
+	if err := withLocking(tx).First(&u, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNotFound
 		}
@@ -96,7 +96,7 @@ func (r *UserRepository) UpdateBalanceTx(tx *gorm.DB, userID uint, delta float64
 // UpdateDebtTx 事务内更新会员欠款（外设损坏押金不足部分计入，欠款不为负）。
 func (r *UserRepository) UpdateDebtTx(tx *gorm.DB, userID uint, delta float64) error {
 	var u model.User
-	if err := tx.Clauses(clauseLocking()).First(&u, userID).Error; err != nil {
+	if err := withLocking(tx).First(&u, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrNotFound
 		}
