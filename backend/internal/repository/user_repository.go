@@ -74,16 +74,36 @@ func (r *UserRepository) List(page, pageSize int) ([]model.User, int64, error) {
 // UpdateBalance 更新余额（扣款时校验余额充足）。
 func (r *UserRepository) UpdateBalance(userID uint, delta float64) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
-		var u model.User
-		if err := tx.Clauses(clauseLocking()).First(&u, userID).Error; err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return ErrNotFound
-			}
-			return err
-		}
-		if u.Balance+delta < 0 {
-			return ErrConflict
-		}
-		return tx.Model(&model.User{}).Where("id = ?", userID).Update("balance", u.Balance+delta).Error
+		return r.UpdateBalanceTx(tx, userID, delta)
 	})
+}
+
+// UpdateBalanceTx 事务内更新余额（扣款时校验余额充足），供多步写操作复用。
+func (r *UserRepository) UpdateBalanceTx(tx *gorm.DB, userID uint, delta float64) error {
+	var u model.User
+	if err := tx.Clauses(clauseLocking()).First(&u, userID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrNotFound
+		}
+		return err
+	}
+	if u.Balance+delta < 0 {
+		return ErrConflict
+	}
+	return tx.Model(&model.User{}).Where("id = ?", userID).Update("balance", u.Balance+delta).Error
+}
+
+// UpdateDebtTx 事务内更新会员欠款（外设损坏押金不足部分计入，欠款不为负）。
+func (r *UserRepository) UpdateDebtTx(tx *gorm.DB, userID uint, delta float64) error {
+	var u model.User
+	if err := tx.Clauses(clauseLocking()).First(&u, userID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrNotFound
+		}
+		return err
+	}
+	if u.Debt+delta < 0 {
+		return ErrConflict
+	}
+	return tx.Model(&model.User{}).Where("id = ?", userID).Update("debt", u.Debt+delta).Error
 }

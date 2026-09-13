@@ -46,6 +46,18 @@ func StatusText(status string) string {
 		return "已拒绝"
 	case "playing":
 		return "进行中"
+	case "available":
+		return "可借"
+	case "rented":
+		return "已借出"
+	case "maintenance":
+		return "维护中"
+	case "renting":
+		return "在借"
+	case "returned":
+		return "已归还"
+	case "damaged":
+		return "损坏已赔付"
 	}
 	return status
 }
@@ -76,6 +88,19 @@ func GameTypeText(gameType string) string {
 		return "其他"
 	}
 	return gameType
+}
+
+// PeripheralTypeText 将外设类型转为中文。
+func PeripheralTypeText(deviceType string) string {
+	switch deviceType {
+	case "keyboard":
+		return "键盘"
+	case "mouse":
+		return "鼠标"
+	case "headset":
+		return "耳机"
+	}
+	return deviceType
 }
 
 // FormatTime 格式化时间。

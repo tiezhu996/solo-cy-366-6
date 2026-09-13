@@ -178,3 +178,60 @@ func IsValidOrderStatus(s string) bool {
 	}
 	return false
 }
+
+// PeripheralType 外设类型枚举。
+const (
+	PeripheralKeyboard = "keyboard" // 键盘
+	PeripheralMouse    = "mouse"    // 鼠标
+	PeripheralHeadset  = "headset"  // 耳机
+)
+
+// AllPeripheralTypes 所有外设类型。
+var AllPeripheralTypes = []string{PeripheralKeyboard, PeripheralMouse, PeripheralHeadset}
+
+// IsValidPeripheralType 判断外设类型是否合法。
+func IsValidPeripheralType(s string) bool {
+	switch s {
+	case PeripheralKeyboard, PeripheralMouse, PeripheralHeadset:
+		return true
+	}
+	return false
+}
+
+// PeripheralStatus 外设设备状态枚举。
+const (
+	PeripheralAvailable   = "available"   // 可借
+	PeripheralRented      = "rented"      // 已借出
+	PeripheralMaintenance = "maintenance" // 维护中
+)
+
+// AllPeripheralStatus 所有外设设备状态。
+var AllPeripheralStatus = []string{PeripheralAvailable, PeripheralRented, PeripheralMaintenance}
+
+// IsValidPeripheralStatus 判断外设设备状态是否合法。
+func IsValidPeripheralStatus(s string) bool {
+	switch s {
+	case PeripheralAvailable, PeripheralRented, PeripheralMaintenance:
+		return true
+	}
+	return false
+}
+
+// RentalStatus 外设租借记录状态枚举。
+const (
+	RentalRenting  = "renting"  // 在借
+	RentalReturned = "returned" // 已归还（完好，押金已释放）
+	RentalDamaged  = "damaged"  // 损坏已赔付
+)
+
+// AllRentalStatus 所有外设租借记录状态。
+var AllRentalStatus = []string{RentalRenting, RentalReturned, RentalDamaged}
+
+// IsValidRentalStatus 判断外设租借记录状态是否合法。
+func IsValidRentalStatus(s string) bool {
+	switch s {
+	case RentalRenting, RentalReturned, RentalDamaged:
+		return true
+	}
+	return false
+}

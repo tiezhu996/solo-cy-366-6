@@ -11,6 +11,7 @@ type User struct {
 	Phone     string    `gorm:"size:20" json:"phone"`
 	Role      string    `gorm:"size:16;default:member" json:"role"`
 	Balance   float64   `gorm:"type:decimal(12,2);default:0" json:"balance"`
+	Debt      float64   `gorm:"type:decimal(12,2);default:0" json:"debt"` // 会员欠款（外设损坏押金不足部分计入）
 	Status    string    `gorm:"size:16;default:active" json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

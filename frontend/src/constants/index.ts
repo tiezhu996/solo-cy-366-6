@@ -135,4 +135,52 @@ export const STATION_TYPE_TEXT: Record<string, string> = {
   box: '包厢',
 }
 
+export const PERIPHERAL_TYPE = {
+  KEYBOARD: 'keyboard',
+  MOUSE: 'mouse',
+  HEADSET: 'headset',
+} as const
+
+export const PERIPHERAL_TYPE_TEXT: Record<string, string> = {
+  keyboard: '键盘',
+  mouse: '鼠标',
+  headset: '耳机',
+}
+
+export const PERIPHERAL_STATUS = {
+  AVAILABLE: 'available',
+  RENTED: 'rented',
+  MAINTENANCE: 'maintenance',
+} as const
+
+export const PERIPHERAL_STATUS_TEXT: Record<string, string> = {
+  available: '可借',
+  rented: '已借出',
+  maintenance: '维护中',
+}
+
+export const PERIPHERAL_STATUS_TYPE: Record<string, string> = {
+  available: 'success',
+  rented: 'primary',
+  maintenance: 'warning',
+}
+
+export const RENTAL_STATUS = {
+  RENTING: 'renting',
+  RETURNED: 'returned',
+  DAMAGED: 'damaged',
+} as const
+
+export const RENTAL_STATUS_TEXT: Record<string, string> = {
+  renting: '在借',
+  returned: '已归还',
+  damaged: '损坏已赔付',
+}
+
+export const RENTAL_STATUS_TYPE: Record<string, string> = {
+  renting: 'primary',
+  returned: 'success',
+  damaged: 'danger',
+}
+
 export const AREA_OPTIONS = ['A区', 'B区', '包厢区']

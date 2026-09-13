@@ -55,6 +55,8 @@ func main() {
 	regRepo := repository.NewRegistrationRepository(db)
 	matchRepo := repository.NewMatchRepository(db)
 	auditRepo := repository.NewAuditRepository(db)
+	peripheralRepo := repository.NewPeripheralRepository(db)
+	rentalRepo := repository.NewPeripheralRentalRepository(db)
 
 	// 服务层
 	authService := service.NewAuthService(userRepo, logger, cfg.JWTSecret, cfg.JWTExpireSec)
@@ -67,6 +69,8 @@ func main() {
 	tournamentService := service.NewTournamentService(tournamentRepo, teamRepo, regRepo, matchRepo, db, logger)
 	auditService := service.NewAuditService(auditRepo, logger)
 	dashboardService := service.NewDashboardService(db, logger)
+	peripheralService := service.NewPeripheralService(peripheralRepo, logger)
+	rentalService := service.NewPeripheralRentalService(rentalRepo, peripheralService, userRepo, db, logger)
 
 	// 处理器层
 	authHandler := handler.NewAuthHandler(authService, userService, logger)
@@ -79,6 +83,8 @@ func main() {
 	tournamentHandler := handler.NewTournamentHandler(tournamentService, logger)
 	auditHandler := handler.NewAuditHandler(auditService, logger)
 	dashboardHandler := handler.NewDashboardHandler(dashboardService, logger)
+	peripheralHandler := handler.NewPeripheralHandler(peripheralService, logger)
+	rentalHandler := handler.NewPeripheralRentalHandler(rentalService, logger)
 
 	hub := handler.NewStationHub(logger)
 	go hub.Run()
@@ -115,6 +121,8 @@ func main() {
 	router.RegisterTournament(api, tournamentHandler, cfg.JWTSecret)
 	router.RegisterAudit(api, auditHandler, cfg.JWTSecret)
 	router.RegisterDashboard(api, dashboardHandler, cfg.JWTSecret)
+	router.RegisterPeripheral(api, peripheralHandler, cfg.JWTSecret)
+	router.RegisterPeripheralRental(api, rentalHandler, cfg.JWTSecret)
 	router.RegisterWS(api, wsHandler)
 
 	srv := &http.Server{

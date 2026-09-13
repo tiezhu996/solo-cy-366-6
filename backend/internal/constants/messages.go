@@ -17,6 +17,11 @@ const (
 	MsgRenewOK      = "续费成功"
 	MsgCheckoutOK   = "下机成功"
 	MsgDrawOK       = "抽签分组完成"
+
+	MsgPeripheralCreateOK = "设备登记成功"
+	MsgRentalCreateOK     = "租借登记成功"
+	MsgRentalReturnOK     = "归还成功，押金已释放"
+	MsgRentalDamageOK     = "损坏赔付登记成功"
 )
 
 // 日志文案模板（非格式化部分）。
@@ -30,4 +35,7 @@ const (
 	LogSessionEnd    = "会员下机"
 	LogTournament    = "赛事操作"
 	LogAuditAction   = "审计动作"
+	LogPeripheral    = "外设设备"
+	LogRental        = "外设租借"
+	LogRentalDamage  = "损坏赔付"
 )

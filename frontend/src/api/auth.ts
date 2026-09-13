@@ -7,6 +7,7 @@ export interface UserItem {
   phone: string
   role: string
   balance: number
+  debt: number
   status: string
 }
 

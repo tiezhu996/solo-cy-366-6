@@ -53,6 +53,8 @@ func migrate(db *gorm.DB) error {
 		&model.Registration{},
 		&model.Match{},
 		&model.AuditLog{},
+		&model.Peripheral{},
+		&model.PeripheralRental{},
 	)
 }
 
@@ -136,6 +138,23 @@ func Seed(db *gorm.DB, logger *slog.Logger) error {
 			return fmt.Errorf("seed create packages: %w", err)
 		}
 		logger.Info("seed time packages created")
+	}
+
+	var peripheralCount int64
+	db.Model(&model.Peripheral{}).Count(&peripheralCount)
+	if peripheralCount == 0 {
+		peripherals := []model.Peripheral{
+			{DeviceNo: "KB-001", DeviceType: "keyboard", Name: "机械键盘 青轴", Status: "available"},
+			{DeviceNo: "KB-002", DeviceType: "keyboard", Name: "机械键盘 红轴", Status: "available"},
+			{DeviceNo: "MS-001", DeviceType: "mouse", Name: "电竞鼠标 轻量版", Status: "available"},
+			{DeviceNo: "MS-002", DeviceType: "mouse", Name: "电竞鼠标 无线版", Status: "available"},
+			{DeviceNo: "HS-001", DeviceType: "headset", Name: "头戴式耳机 7.1声道", Status: "available"},
+			{DeviceNo: "HS-002", DeviceType: "headset", Name: "入耳式耳机 降噪版", Status: "available"},
+		}
+		if err := db.Create(&peripherals).Error; err != nil {
+			return fmt.Errorf("seed create peripherals: %w", err)
+		}
+		logger.Info("seed peripherals created")
 	}
 	return nil
 }

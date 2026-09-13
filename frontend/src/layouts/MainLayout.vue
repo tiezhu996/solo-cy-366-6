@@ -13,6 +13,7 @@
       <van-tabbar-item replace to="/stations" icon="apps-o">机位</van-tabbar-item>
       <van-tabbar-item replace to="/recharge" icon="gold-coin-o">充值</van-tabbar-item>
       <van-tabbar-item replace to="/reservations" icon="calendar-o">预约</van-tabbar-item>
+      <van-tabbar-item replace to="/peripherals" icon="bag-o">外设</van-tabbar-item>
       <van-tabbar-item replace to="/tournaments" icon="trophy-o">赛事</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -33,6 +34,7 @@ const titles: Record<string, string> = {
   stations: '机位管理',
   recharge: '充值与时长包',
   reservations: '机位预约',
+  peripherals: '外设租借',
   sessions: '上机记录与排行榜',
   tournaments: '赛事管理',
   audits: '操作审计',

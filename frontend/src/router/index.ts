@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'stations', name: 'Stations', component: () => import('@/pages/Stations.vue') },
       { path: 'recharge', name: 'Recharge', component: () => import('@/pages/Recharge.vue') },
       { path: 'reservations', name: 'Reservations', component: () => import('@/pages/Reservations.vue') },
+      { path: 'peripherals', name: 'Peripherals', component: () => import('@/pages/Peripherals.vue') },
       { path: 'sessions', name: 'Sessions', component: () => import('@/pages/Sessions.vue') },
       { path: 'tournaments', name: 'Tournaments', component: () => import('@/pages/Tournaments.vue') },
       { path: 'audits', name: 'Audits', component: () => import('@/pages/Audits.vue') },
